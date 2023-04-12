@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 # Create your models here.
 class Npc(models.Model):
     name = models.CharField(max_length=30)
@@ -16,5 +15,4 @@ class Npc(models.Model):
     race = models.CharField(max_length=30)
     alignment = models.CharField(max_length=30, blank=True)
     dnd_class = models.CharField(max_length=30, blank=True)
-    user = models.ManyToManyField(User)
     def __str__(self): return self.name 
