@@ -1,9 +1,9 @@
 from django.db import models
 # Create your models here.
 class Npc(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, blank=True)
     age = models.IntegerField(default=0)  
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=250, blank=True)
     job = models.CharField(max_length=30, blank=True)
     quirk = models.CharField(max_length=150, blank=True)
     strength = models.IntegerField(default=0)
