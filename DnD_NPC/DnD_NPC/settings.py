@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os 
+import dj_database_url
 
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +23,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(#fo@(=gnlyr@$e^)$^2f(b2-9l$!=17exk0v9@f!1g6*&5+2_'
+# SECRET_KEY = 'django-insecure-(#fo@(=gnlyr@$e^)$^2f(b2-9l$!=17exk0v9@f!1g6*&5+2_'
+
+SECRET_KEY = os.environ.get("SECRET_KEY", default="your secret key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = 'RENDER' not in os.environ
 
+ALLOWED_HOSTS = ["*"]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
 # Application definition
 
@@ -45,8 +53,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -97,16 +105,22 @@ WSGI_APPLICATION = 'DnD_NPC.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dnd_app',
-        'USER': 'bailey',
-        'PASSWORD': 'Bojangles60',
-        'HOST': 'localhost'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'dnd_app',
+#         'USER': 'bailey',
+#         'PASSWORD': 'Bojangles60',
+#         'HOST': 'localhost'
+#     }
+# }
 
+DATABASES = {
+    'default': dj_database_url.config(
+    conn_max_age=600,
+    conn_health_checks=True,
+    )
+}
 
 
 # Password validation
